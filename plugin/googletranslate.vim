@@ -303,8 +303,12 @@ set balloondelay=400
 set balloonexpr=GoogleTranslateBalloon()
 "set balloonevalcode 59
 
+function! s:SupportedLangs(ArgLead, CmdLine, CursorPos)
+  return system("cat " . expand("<sfile>:p:h") . "/data/langs.dat")
+endfunction
+
 command! -nargs=* -range GoogleTranslate <line1>,<line2>call GoogleTranslateRange(<f-args>)
-command! -nargs=* -range Trans <line1>,<line2>call GoogleTranslateRange(<f-args>)
+command! -nargs=* -complete=custom,s:SupportedLangs -range Trans <line1>,<line2>call GoogleTranslateRange(<f-args>)
 command! -nargs=1 GoogleTranslateBalloon call GoogleTranslateBallooneval(<f-args>)
 command! -nargs=1 TransBalloon call GoogleTranslateBallooneval(<f-args>)
 vnoremap  <expr>  <leader>gt    <SID>TranslateVisualText()
